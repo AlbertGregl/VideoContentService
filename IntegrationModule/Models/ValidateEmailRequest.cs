@@ -6,4 +6,3 @@
         public string B64SecToken { get; set; }
     }
 }
- 

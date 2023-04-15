@@ -8,3 +8,4 @@ public partial class Tag
 
     public virtual ICollection<VideoTag> VideoTags { get; } = new List<VideoTag>();
 }
+ 

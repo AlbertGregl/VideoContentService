@@ -10,4 +10,3 @@ namespace IntegrationModule.Services
         void ChangePassword(ChangePasswordRequest request);
     }
 }
- 

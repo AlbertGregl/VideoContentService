@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace IntegrationModule.Models;
+﻿namespace IntegrationModule.Models;
 
 public partial class Image
 {

@@ -6,4 +6,3 @@
         public string RefreshToken { get; set; }
     }
 }
- 

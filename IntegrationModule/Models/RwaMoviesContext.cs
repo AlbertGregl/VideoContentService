@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-
 namespace IntegrationModule.Models;
 
 public partial class RwaMoviesContext : DbContext

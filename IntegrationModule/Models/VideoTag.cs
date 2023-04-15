@@ -15,4 +15,3 @@ public partial class VideoTag
 
     public virtual Video Video { get; set; } = null!;
 }
- 

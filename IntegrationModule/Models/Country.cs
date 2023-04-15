@@ -10,3 +10,4 @@ public partial class Country
 
     public virtual ICollection<User> Users { get; } = new List<User>();
 }
+ 

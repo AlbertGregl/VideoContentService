@@ -1,5 +1,4 @@
-﻿
-namespace IntegrationModule.Models;
+﻿namespace IntegrationModule.Models;
 
 public partial class User
 {

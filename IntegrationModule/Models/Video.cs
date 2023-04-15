@@ -27,4 +27,3 @@ public partial class Video
 
     public virtual ICollection<VideoTag> VideoTags { get; } = new List<VideoTag>();
 }
- 
