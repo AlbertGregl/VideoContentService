@@ -15,6 +15,8 @@ namespace IntegrationModule.Models
         [Required]
         public string Password { get; set; }
         public string Phone { get; set; }
+        [Required]
+        public int CountryOfResidenceId { get; set; }
     }
 }
  
