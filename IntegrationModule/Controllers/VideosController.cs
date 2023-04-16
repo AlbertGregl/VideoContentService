@@ -1,4 +1,5 @@
 ﻿using IntegrationModule.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
  
 namespace IntegrationModule.Controllers
@@ -19,9 +20,10 @@ namespace IntegrationModule.Controllers
             _dbContext = dbContext;
         }
 
-        // GET method to retrieve all videos with support for paging, filtering and ordering
+        // GET method to retrieve all videos with support for paging, filtering and ordering, USER MUST BE AUTHORIZED
+        [Authorize]
         [HttpGet("[action]")]
-        public ActionResult<IEnumerable<VideoResponse>> GetAllWithPagingAndFilteringAndOrdering([FromQuery] string name, [FromQuery] string orderBy, [FromQuery] int? page, [FromQuery] int? pageSize)
+        public ActionResult<IEnumerable<VideoResponse>> GetAll([FromQuery] string name, [FromQuery] string orderBy, [FromQuery] int? page, [FromQuery] int? pageSize)
         {
             try
             {
@@ -83,6 +85,7 @@ namespace IntegrationModule.Controllers
         }
 
         // GET method to retrieve a specific video by ID
+        [Authorize]
         [HttpGet("[action]/{id}")]
         public ActionResult<VideoResponse> GetById(int id)
         {
@@ -117,6 +120,7 @@ namespace IntegrationModule.Controllers
         }
 
         // POST method to create a new video
+        [Authorize]
         [HttpPost("[action]")]
         public ActionResult<VideoResponse> Create([FromBody] VideoRequest videoRequest)
         {
@@ -162,6 +166,7 @@ namespace IntegrationModule.Controllers
         }
 
         // PUT method to update an existing video
+        [Authorize]
         [HttpPut("[action]/{id}")]
         public ActionResult<VideoResponse> Update(int id, [FromBody] VideoRequest videoRequest)
         {
@@ -209,6 +214,7 @@ namespace IntegrationModule.Controllers
         }
 
         // DELETE method to delete an existing video
+        [Authorize]
         [HttpDelete("[action]/{id}")]
         public ActionResult Delete(int id)
         {
