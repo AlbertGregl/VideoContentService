@@ -81,6 +81,7 @@ builder.Services.AddDbContext<RwaMoviesContext>(options =>
     options.UseSqlServer("Name=ConnectionStrings:RwaMoviesDatabase");
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
