@@ -46,13 +46,16 @@ namespace IntegrationModule.Controllers
                 _dbContext.Users.Add(newUser);
                 _dbContext.SaveChanges();
 
+                // notification body
+                var body = $"Please confirm your email by clicking on the following link: https://localhost:7078/validate-email.html?username={newUser.Username}&b64SecToken={newUser.SecurityToken}";
+     
                 // create notification
                 var notification = new Notification
                 {
                     CreatedAt = DateTime.UtcNow,
                     ReceiverEmail = newUser.Email,
                     Subject = "Email confirmation",
-                    Body = $"Please confirm your email by clicking on the following link: <a href='{Url.Action("ValidateEmail", "Users", new { username = newUser.Username, b64SecToken = newUser.SecurityToken }, Request.Scheme)}'>Click here</a>"
+                    Body = body
                 };
                 // save notification to the database
                 _dbContext.Notifications.Add(notification);
