@@ -49,6 +49,7 @@ namespace IntegrationModule.Controllers
                 // create notification
                 var notification = new Notification
                 {
+                    CreatedAt = DateTime.UtcNow,
                     ReceiverEmail = newUser.Email,
                     Subject = "Email confirmation",
                     Body = $"Please confirm your email by clicking on the following link: <a href='{Url.Action("ValidateEmail", "Users", new { username = newUser.Username, b64SecToken = newUser.SecurityToken }, Request.Scheme)}'>Click here</a>"

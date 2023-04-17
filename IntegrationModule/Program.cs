@@ -86,10 +86,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-// if (app.Environment.IsDevelopment()) removed;
 // Use Swagger interface in both production and developmentenvironments
-
-// Serve the Swagger JSON endpoint
 app.UseSwagger();
 // Serve the Swagger UI
 app.UseSwaggerUI(c =>
@@ -107,5 +104,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Enable static files middleware
+app.UseStaticFiles();
 
 app.Run();

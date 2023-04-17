@@ -27,7 +27,8 @@ namespace IntegrationModule.Controllers
                         Id = dbNotification.Id,
                         ReceiverEmail = dbNotification.ReceiverEmail,
                         Subject = dbNotification.Subject,
-                        Body = dbNotification.Body
+                        Body = dbNotification.Body,
+                        SentAt = dbNotification.SentAt
                     });
                 return Ok(allNotifications);
             }
@@ -51,7 +52,8 @@ namespace IntegrationModule.Controllers
                     Id = dbNotification.Id,
                     ReceiverEmail = dbNotification.ReceiverEmail,
                     Subject = dbNotification.Subject,
-                    Body = dbNotification.Body
+                    Body = dbNotification.Body,
+                    SentAt = dbNotification.SentAt
                 });
             }
             catch (Exception)
@@ -59,6 +61,22 @@ namespace IntegrationModule.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        // retrieve unsent notifications count
+        [HttpGet("[action]")]
+        public ActionResult<int> GetUnsentCount()
+        {
+            try
+            {
+                var unsentCount = _dbContext.Notifications.Count(x => x.SentAt == null);
+                return Ok(unsentCount);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
 
         [HttpPost()]
         public ActionResult<NotificationResponse> Create(NotificationRequest request)

@@ -14,5 +14,7 @@ namespace IntegrationModule.Models
 
         [Required]
         public string Body { get; set; }
+
+        public DateTime? SentAt { get; set; }
     }
 }
