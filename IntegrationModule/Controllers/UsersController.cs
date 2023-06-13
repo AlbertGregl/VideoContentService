@@ -1,4 +1,5 @@
 ﻿using IntegrationModule.Models;
+using IntegrationModule.BLModels;
 using IntegrationModule.Services;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;

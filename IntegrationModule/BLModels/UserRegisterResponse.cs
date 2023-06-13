@@ -1,4 +1,4 @@
-﻿namespace IntegrationModule.Models
+﻿namespace IntegrationModule.BLModels
 {
     public class UserRegisterResponse
     {

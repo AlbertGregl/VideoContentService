@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace IntegrationModule.Models
+namespace IntegrationModule.BLModels
 {
     public partial class NotificationResponse
     {

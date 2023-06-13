@@ -1,4 +1,4 @@
-﻿namespace IntegrationModule.Models
+﻿namespace IntegrationModule.BLModels
 {
     public partial class TagResponse
     {
@@ -7,4 +7,3 @@
         public virtual ICollection<VideoTagResponse> VideoTags { get; } = new List<VideoTagResponse>();
     }
 }
- 

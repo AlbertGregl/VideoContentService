@@ -1,4 +1,5 @@
-﻿using IntegrationModule.Models;
+﻿using IntegrationModule.BLModels;
+using IntegrationModule.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mail;
 
