@@ -9,5 +9,6 @@
         public int TotalSeconds { get; set; }
         public string? StreamingUrl { get; set; }
         public int? ImageId { get; set; }
+        public List<TagResponse>? Tags { get; set; }
     }
 }

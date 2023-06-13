@@ -21,7 +21,7 @@ namespace IntegrationModule.Controllers
         }
 
         // GET method to retrieve all videos with support for paging, filtering and ordering, USER MUST BE AUTHORIZED
-        [Authorize]
+        //[Authorize]
         [HttpGet("[action]")]
         public ActionResult<IEnumerable<VideoResponse>> GetAll([FromQuery] string name, [FromQuery] string orderBy, [FromQuery] int? page, [FromQuery] int? pageSize)
         {
@@ -62,7 +62,8 @@ namespace IntegrationModule.Controllers
                 if (page.HasValue && pageSize.HasValue)
                 {
                     videos = videos.Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value);
-                }
+                }               
+
                 // Map the video entities to their corresponding DTOs
                 var videoResponses = videos.Select(v => new VideoResponse
                 {
@@ -72,7 +73,12 @@ namespace IntegrationModule.Controllers
                     GenreId = v.GenreId,
                     TotalSeconds = v.TotalSeconds,
                     StreamingUrl = v.StreamingUrl,
-                    ImageId = v.ImageId
+                    ImageId = v.ImageId,
+                    Tags = v.VideoTags.Select(vt => new TagResponse
+                    {
+                        Id = vt.Tag.Id,
+                        Name = vt.Tag.Name
+                    }).ToList()
                 });
                 // Return the mapped DTOs
                 return Ok(videoResponses);
@@ -85,7 +91,7 @@ namespace IntegrationModule.Controllers
         }
 
         // GET method to retrieve a specific video by ID
-        [Authorize]
+        //[Authorize]
         [HttpGet("[action]/{id}")]
         public ActionResult<VideoResponse> GetById(int id)
         {
@@ -107,7 +113,12 @@ namespace IntegrationModule.Controllers
                     GenreId = video.GenreId,
                     TotalSeconds = video.TotalSeconds,
                     StreamingUrl = video.StreamingUrl,
-                    ImageId = video.ImageId
+                    ImageId = video.ImageId,
+                    Tags = video.VideoTags.Select(vt => new TagResponse
+                    {
+                        Id = vt.Tag.Id,
+                        Name = vt.Tag.Name
+                    }).ToList()
                 };
                 // Return the mapped DTO
                 return Ok(videoResponse);
@@ -120,7 +131,7 @@ namespace IntegrationModule.Controllers
         }
 
         // POST method to create a new video
-        [Authorize]
+        //[Authorize]
         [HttpPost("[action]")]
         public ActionResult<VideoResponse> Create([FromBody] VideoRequest videoRequest)
         {
@@ -166,7 +177,7 @@ namespace IntegrationModule.Controllers
         }
 
         // PUT method to update an existing video
-        [Authorize]
+        //[Authorize]
         [HttpPut("[action]/{id}")]
         public ActionResult<VideoResponse> Update(int id, [FromBody] VideoRequest videoRequest)
         {
@@ -214,7 +225,7 @@ namespace IntegrationModule.Controllers
         }
 
         // DELETE method to delete an existing video
-        [Authorize]
+        //[Authorize]
         [HttpDelete("[action]/{id}")]
         public ActionResult Delete(int id)
         {
