@@ -35,6 +35,25 @@ namespace VideoContentService.Admin.Services
             return JsonConvert.DeserializeObject<IEnumerable<VideoResponse>>(content);
         }
 
+        public async Task<IEnumerable<VideoResponse>> GetAllVideosWithGenreFilterAsync(int page, string nameFilter, string genreFilter)
+        {
+            var url = $"{_baseUrl}/Videos/GetAll?page={page}";
+
+            if (!string.IsNullOrEmpty(nameFilter))
+            {
+                url += $"&name={nameFilter}";
+            }
+
+            if (!string.IsNullOrEmpty(genreFilter))
+            {
+                url += $"&genre={genreFilter}";
+            }
+
+            var response = await _httpClient.GetAsync(url);
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<IEnumerable<VideoResponse>>(content);
+        }
+
         public async Task<VideoResponse> GetVideoByIdAsync(int id)
         {
             var response = await _httpClient.GetAsync($"{_baseUrl}/Videos/GetById/{id}");

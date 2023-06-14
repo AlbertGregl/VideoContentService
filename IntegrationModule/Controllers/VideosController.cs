@@ -24,7 +24,7 @@ namespace IntegrationModule.Controllers
         // GET method to retrieve all videos with support for paging, filtering and ordering, USER MUST BE AUTHORIZED
         [Authorize]
         [HttpGet("[action]")]
-        public ActionResult<IEnumerable<VideoResponse>> GetAll([FromQuery] string name, [FromQuery] string orderBy, [FromQuery] int? page, [FromQuery] int? pageSize)
+        public ActionResult<IEnumerable<VideoResponse>> GetAll([FromQuery] string name, [FromQuery] string genre, [FromQuery] string orderBy, [FromQuery] int? page, [FromQuery] int? pageSize)
         {
             try
             {
@@ -35,6 +35,12 @@ namespace IntegrationModule.Controllers
                 {
                     videos = videos.Where(v => v.Name.ToLower().Contains(name.ToLower()));
                 }
+                // Apply filtering by genre 
+                if (!string.IsNullOrWhiteSpace(genre))
+                {
+                    videos = videos.Where(v => v.Genre.Name.ToLower().Contains(genre.ToLower()));
+                }
+
 
                 // Apply ordering id, name and total time
                 if (!string.IsNullOrWhiteSpace(orderBy))

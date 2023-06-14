@@ -1,6 +1,4 @@
-﻿@model IEnumerable<IntegrationModule.BLModels.VideoResponse>
-
-@{
+﻿@{
     ViewData["Title"] = "Video Management";
 }
 
@@ -10,6 +8,14 @@
     <a asp-action="Create" class="btn btn-primary">Add New Video</a>
 </p>
 
+<!-- Filters -->
+<div>
+    <input type="text" id="filterByName" placeholder="Filter by name" />
+    <input type="text" id="filterByGenre" placeholder="Filter by genre" />
+    <button id="applyFilters" class="btn btn-secondary">Apply</button>
+</div>
+
+<!-- Table for displaying videos -->
 <table class="table">
     <thead>
         <tr>
@@ -23,29 +29,78 @@
             <th>Actions</th>
         </tr>
     </thead>
-    <tbody>
-        @if (Model != null)
-        {
-            @foreach (var video in Model)
-            {
-                <tr>
-                    <td>@video.Id</td>
-                    <td>@video.Name</td>
-                    <td>@video.Description</td>
-                    <td>@video.GenreId</td> <!-- You might want to display genre name instead -->
-                    <td>@video.TotalSeconds</td>
-                    <td>@video.StreamingUrl</td>
-                    <td>@video.ImageId</td> <!-- You might want to display the image itself -->
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@video.Id" class="btn btn-secondary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@video.Id" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            <p>No videos found.</p>
-        }
+    <tbody id="videoTableBody">
+        <!-- Populated using AJAX -->
     </tbody>
 </table>
+
+<!-- Pagination -->
+<div>
+    <button id="previousPage" class="btn btn-secondary">Previous</button>
+    <span id="currentPage">1</span>
+    <button id="nextPage" class="btn btn-secondary">Next</button>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize variables for current page and filters
+            var currentPage = 1;
+            var nameFilter = localStorage.getItem('nameFilter') || '';
+            var genreFilter = localStorage.getItem('genreFilter') || '';
+
+            // Initialize filters input
+            $("#filterByName").val(nameFilter);
+            $("#filterByGenre").val(genreFilter);
+
+            // Load initial data
+            loadData(currentPage, nameFilter, genreFilter);
+
+            // Event handler for next page button
+            $("#nextPage").click(function () {
+                currentPage++;
+                loadData(currentPage, nameFilter, genreFilter);
+            });
+
+            // Event handler for previous page button
+            $("#previousPage").click(function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    loadData(currentPage, nameFilter, genreFilter);
+                }
+            });
+
+            // Event handler for applying filters
+            $("#applyFilters").click(function () {
+                nameFilter = $("#filterByName").val();
+                genreFilter = $("#filterByGenre").val();
+                localStorage.setItem('nameFilter', nameFilter);
+                localStorage.setItem('genreFilter', genreFilter);
+                currentPage = 1; // Reset the current page to 1 after applying filters
+                loadData(currentPage, nameFilter, genreFilter);
+            });
+
+            // Load data using AJAX
+            function loadData(page, nameFilter, genreFilter) {
+                $.ajax({
+                    url: "/VideoAdmin/LoadData",
+                    data: { page: page, nameFilter: nameFilter, genreFilter: genreFilter },
+                    type: "GET",
+                    success: function (data) {
+                        $("#videoTableBody").html(data);
+                        $("#currentPage").text(currentPage);
+
+                         if (data is empty or no more records) {
+                             $("#nextPage").prop("disabled", true);
+                         } else {
+                             $("#nextPage").prop("disabled", false);
+                         }
+                    },
+                    error: function () {
+                        alert("An error occurred while loading data.");
+                    }
+                });
+            }
+        });
+    </script>
+}   

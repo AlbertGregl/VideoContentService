@@ -1,0 +1,18 @@
+﻿@model IEnumerable<IntegrationModule.BLModels.VideoResponse>
+
+@foreach (var video in Model)
+{
+    <tr>
+        <td>@video.Id</td>
+        <td>@video.Name</td>
+        <td>@video.Description</td>
+        <td>@video.GenreId</td> <!-- TODO display genre name -->
+        <td>@video.TotalSeconds</td>
+        <td>@video.StreamingUrl</td>
+        <td>@video.ImageId</td> <!-- TODO display the image -->
+        <td>
+            <a asp-action="Edit" asp-route-id="@video.Id" class="btn btn-secondary">Edit</a>
+            <a asp-action="Delete" asp-route-id="@video.Id" class="btn btn-danger">Delete</a>
+        </td>
+    </tr>
+}
