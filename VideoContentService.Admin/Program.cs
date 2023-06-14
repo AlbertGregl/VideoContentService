@@ -1,6 +1,5 @@
-using System.Threading.Tasks;
 using VideoContentService.Admin.Services;
-using AutoMapper;
+using VideoContentService.Admin.Properties;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,21 +9,21 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 //builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
 
-// Add the service for the admin API
-builder.Services.AddScoped<IAdminApiService, AdminApiService>();
-// Add the service for the IMapper
-builder.Services.AddAutoMapper(
-    typeof(IntegrationModule.Mapping.AutomapperProfile),
-    typeof(VideoContentService.Admin.Mapping.AdminMappingProfile));
+// Add configuration for the API and Admin
+builder.Services.Configure<ApiConfig>(builder.Configuration.GetSection("API"));
+builder.Services.Configure<AdminConfig>(builder.Configuration.GetSection("AdminCredentials"));
+
+// Add the VideoService
+builder.Services.AddHttpClient<VideoService>();
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Admin/ManageVideos");
-}
+//if (!app.Environment.IsDevelopment())
+//{
+//    app.UseExceptionHandler("/Admin/Index");
+//}
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -33,6 +32,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Admin}/{action=ManageVideos}/{id?}");
+    pattern: "{controller=VideoAdmin}/{action=Index}/{id?}");
 
 app.Run();

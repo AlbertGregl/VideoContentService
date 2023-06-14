@@ -72,7 +72,7 @@ namespace IntegrationModule.Services
                 }),
                 Issuer = _configuration["JWT:Issuer"],
                 Audience = _configuration["JWT:Audience"],
-                Expires = DateTime.UtcNow.AddMinutes(10),
+                Expires = DateTime.UtcNow.AddDays(60), // this was set to 10 min before
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(jwtKeyBytes),
                     SecurityAlgorithms.HmacSha256Signature)
