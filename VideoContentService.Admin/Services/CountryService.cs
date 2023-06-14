@@ -1,4 +1,4 @@
-﻿using IntegrationModule.Models;
+﻿using IntegrationModule.BLModels;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using VideoContentService.Admin.Properties;
@@ -17,11 +17,11 @@ namespace VideoContentService.Admin.Services
         }
 
         // GET: api/Countries
-        public async Task<IEnumerable<Country>> GetAllCountriesAsync(int page)
+        public async Task<IEnumerable<CountryResponse>> GetAllCountriesAsync(int page)
         {
             var response = await _httpClient.GetAsync($"{_baseUrl}/Countries?page={page}");
             var content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<IEnumerable<Country>>(content);
+            return JsonConvert.DeserializeObject<IEnumerable<CountryResponse>>(content);
         }
     }
 }

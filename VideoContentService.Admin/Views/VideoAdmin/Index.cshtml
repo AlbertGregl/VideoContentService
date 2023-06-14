@@ -91,12 +91,6 @@
                     success: function (data) {
                         $("#videoTableBody").html(data);
                         $("#currentPage").text(currentPage);
-
-                         if (data is empty or no more records) {
-                             $("#nextPage").prop("disabled", true);
-                         } else {
-                             $("#nextPage").prop("disabled", false);
-                         }
                     },
                     error: function () {
                         alert("An error occurred while loading data.");

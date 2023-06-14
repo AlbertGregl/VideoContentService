@@ -13,9 +13,9 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.Configure<ApiConfig>(builder.Configuration.GetSection("API"));
 builder.Services.Configure<AdminConfig>(builder.Configuration.GetSection("AdminCredentials"));
 
-// Add the VideoService
+// Add Services for the API
 builder.Services.AddHttpClient<VideoService>();
-
+builder.Services.AddHttpClient<CountryService>();
 
 var app = builder.Build();
 
