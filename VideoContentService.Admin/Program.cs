@@ -16,6 +16,7 @@ builder.Services.Configure<AdminConfig>(builder.Configuration.GetSection("AdminC
 // Add Services for the API
 builder.Services.AddHttpClient<VideoService>();
 builder.Services.AddHttpClient<CountryService>();
+builder.Services.AddHttpClient<TagService>();
 
 var app = builder.Build();
 
