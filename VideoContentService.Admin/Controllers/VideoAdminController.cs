@@ -104,7 +104,7 @@ namespace VideoContentService.Admin.Controllers
             }
         }
 
-
+        // This method is called from the Index view to load the next page of videos via AJAX
         [HttpGet]
         public async Task<IActionResult> LoadData(int page, string nameFilter, string genreFilter)
         {
@@ -119,7 +119,5 @@ namespace VideoContentService.Admin.Controllers
                 return PartialView("Partials/_Error");
             }
         }
-
-
     }
 }
