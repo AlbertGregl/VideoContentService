@@ -74,6 +74,55 @@ namespace IntegrationModule.Controllers
             }
         }
 
+
+        [HttpPost("[action]")]
+        public ActionResult<UserLoginResponse> Login([FromBody] UserLoginRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                // Normalize and check if username exists in the database
+                var username = request.Username.ToLower();
+                var user = _dbContext.Users.FirstOrDefault(x => x.Username == username);
+
+                if (user == null)
+                {
+                    return Unauthorized("Invalid username.");
+                }
+
+                // Authenticate the user
+                bool isAuthenticated = Authenticate(request.Username, request.Password);
+
+                if (!isAuthenticated)
+                    return Unauthorized("Invalid password.");
+
+                // Generate token from JwtTokens
+                var tokens = _userRepository.JwtTokens(new JwtTokensRequest
+                {
+                    Username = request.Username,
+                    Password = request.Password
+                });
+
+                // Return user details along with the token
+                return Ok(new UserLoginResponse
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Token = tokens.Token
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [HttpPost("[action]")]
         public ActionResult ValidateEmail([FromBody] ValidateEmailRequest request)
         {

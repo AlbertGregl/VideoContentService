@@ -5,7 +5,9 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationModule", "IntegrationModule\IntegrationModule.csproj", "{598EFEA9-7839-4E25-AD60-971DDA9EE7D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoContentService.Admin", "VideoContentService.Admin\VideoContentService.Admin.csproj", "{8F9AB662-68C8-4DC7-9D50-738B58437B11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VideoContentService.Admin", "VideoContentService.Admin\VideoContentService.Admin.csproj", "{8F9AB662-68C8-4DC7-9D50-738B58437B11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoContentService.Public", "VideoContentService.Public\VideoContentService.Public.csproj", "{8035CEA2-5CF0-405B-B3F2-6A246FC1C665}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{8F9AB662-68C8-4DC7-9D50-738B58437B11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F9AB662-68C8-4DC7-9D50-738B58437B11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F9AB662-68C8-4DC7-9D50-738B58437B11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8035CEA2-5CF0-405B-B3F2-6A246FC1C665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8035CEA2-5CF0-405B-B3F2-6A246FC1C665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8035CEA2-5CF0-405B-B3F2-6A246FC1C665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8035CEA2-5CF0-405B-B3F2-6A246FC1C665}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
