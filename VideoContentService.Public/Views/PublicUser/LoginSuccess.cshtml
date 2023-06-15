@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Login Successful";
+}
+
+@section Scripts {
+    <script>
+        // Store token in localStorage
+        localStorage.setItem('token', '@Model');
+
+        // Redirect to index or another page
+        window.location.href = '/';
+    </script>
+}

@@ -72,7 +72,6 @@ namespace VideoContentService.Public.Controllers
 
                     if (response != null)
                     {
-                        // Retrieve JWT Tokens
                         var tokens = await _publicUserService.GetJwtTokensAsync(new JwtTokensRequest
                         {
                             Username = userLoginRequest.Username,
@@ -81,12 +80,13 @@ namespace VideoContentService.Public.Controllers
 
                         if (tokens != null)
                         {
-                            // Store the tokens for future authenticated requests in the session
-                            HttpContext.Session.SetString("JWTToken", tokens.Token);
+                            return View("LoginSuccess", tokens.Token);
                         }
-
-                        TempData["Message"] = "Logged in successfully!";
-                        return RedirectToAction("Index"); //TODO: Redirect to the video selection page
+                        else
+                        {
+                            TempData["Error"] = "Invalid login credentials.";
+                            return View(userLoginRequest);
+                        }
                     }
                     else
                     {
@@ -102,10 +102,10 @@ namespace VideoContentService.Public.Controllers
             catch (Exception ex)
             {
                 TempData["Error"] = "An error occurred during login.";
-                // Log the exception message: ex.Message
                 return RedirectToAction("Error");
             }
         }
+
 
         public IActionResult Error()
         {
