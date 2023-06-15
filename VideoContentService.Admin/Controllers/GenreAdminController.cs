@@ -13,6 +13,7 @@ namespace VideoContentService.Admin.Controllers
             _genreService = genreService;
         }
 
+        // GET: GenreAdmin 
         public async Task<IActionResult> Index()
         {
             return View();
@@ -23,12 +24,14 @@ namespace VideoContentService.Admin.Controllers
         {
             try
             {
+                // Get all genres 
                 var genres = await _genreService.GetAllGenresAsync();
                 return Json(genres);
             }
             catch (HttpRequestException)
             {
                 return Json(new { error = "Error fetching genres" });
+
             }
         }
 
