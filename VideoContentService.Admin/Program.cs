@@ -17,6 +17,7 @@ builder.Services.Configure<AdminConfig>(builder.Configuration.GetSection("AdminC
 builder.Services.AddHttpClient<VideoService>();
 builder.Services.AddHttpClient<CountryService>();
 builder.Services.AddHttpClient<TagService>();
+builder.Services.AddHttpClient<GenreService>();
 
 var app = builder.Build();
 
@@ -33,6 +34,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=VideoAdmin}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
