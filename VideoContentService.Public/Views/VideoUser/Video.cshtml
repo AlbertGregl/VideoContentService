@@ -1,0 +1,35 @@
+﻿@model IntegrationModule.BLModels.VideoResponse
+
+@{
+    ViewData["Title"] = "Video Page";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <img id="videoImage" data-image-id="@Model.ImageId" class="card-img-top" alt="@Model.Name">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Name</h5>
+                    <p class="card-text">@Model.Description</p>
+                    <a href="@Model.StreamingUrl" target="_blank" class="btn btn-primary">Play Video</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var imageId = $('#videoImage').data('image-id');
+
+            if (imageId) {
+                $.get('@Url.Action("GetImageUrl", "Images")', { id: imageId }, function (imageUrl) {
+                    $('#videoImage').attr('src', imageUrl);
+                });
+            }
+        });
+    </script>
+}

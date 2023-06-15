@@ -14,9 +14,8 @@
             // Check if the user is logged in
             var token = localStorage.getItem('JWT');
             if (token) {
-                // Redirect to video controller if the user is logged in
-                // TODO: video controller
-                window.location.href = '/path-to-video-controller';
+                // Redirect to VideoUser controller's Index action if the user is logged in
+                window.location.href = '/VideoUser/Index';
             }
         });
     </script>

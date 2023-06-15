@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Video Selection";
+}
+
+<div class="container">
+    <div class="row my-4">
+        <div class="col">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by video name..." />
+        </div>
+    </div>
+
+    <div id="videoCards" class="row"></div>
+
+    <div class="row">
+        <div class="col text-center">
+            <button id="loadMoreBtn" class="btn btn-secondary" data-page="2">Load More Videos</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var token = localStorage.getItem('JWT');
+            loadVideos("", "", 1);
+
+            $('#searchInput').on('keyup', function () {
+                var query = $(this).val().toLowerCase();
+                loadVideos(query, "", 1);
+            });
+
+            $('#loadMoreBtn').on('click', function () {
+                var query = $('#searchInput').val().toLowerCase();
+                var page = $(this).data('page');
+                loadVideos(query, "", page);
+            });
+
+            function loadVideos(name, genre, page) {
+                $.ajax({
+                    url: '@Url.Action("FetchVideos", "VideoUser")',
+                    type: 'GET',
+                    data: {
+                        name: name,
+                        genre: genre,
+                        orderBy: 'id', // You can change this if you want a different ordering
+                        page: page,
+                        pageSize: 10 // Number of videos per page
+                    },
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    },
+                    success: function (videos) {
+                        var videoCards = $('#videoCards');
+                        if (page === 1) {
+                            videoCards.html('');
+                        }
+
+                        $.each(videos, function (index, video) {
+                            var videoCard = '<div class="col-md-4"><div class="card mb-4">';
+                            videoCard += video.imageId ? '<img src="' + video.imageId + '" class="card-img-top" alt="' + video.name + '">' : '<img src="path-to-default-image" class="card-img-top" alt="Default Image">';
+                            videoCard += '<div class="card-body"><h5 class="card-title">' + (video.name || "No title") + '</h5>';
+                            videoCard += '<p class="card-text">' + (video.description || "No description available.") + '</p>';
+                            videoCard += video.id > 0 ? '<a href="@Url.Action("Video", "VideoUser")/' + video.id + '" class="btn btn-primary">Watch Video</a>' : '';
+                            videoCard += '</div></div></div>';
+
+                            videoCards.append(videoCard);
+                        });
+
+                        $('#loadMoreBtn').data('page', page + 1);
+                    }
+                });
+            }
+        });
+    </script>
+}

@@ -14,6 +14,7 @@ builder.Services.Configure<ApiConfig>(builder.Configuration.GetSection("API"));
 
 // Add Services for the API
 builder.Services.AddHttpClient<PublicUserService>();
+builder.Services.AddHttpClient<VideoUserService>();
 
 var app = builder.Build();
 
