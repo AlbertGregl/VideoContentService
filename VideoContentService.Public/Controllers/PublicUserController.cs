@@ -80,7 +80,14 @@ namespace VideoContentService.Public.Controllers
 
                         if (tokens != null)
                         {
-                            return View("LoginSuccess", tokens.Token);
+                            // Store the token and username in a dictionary
+                            var userData = new Dictionary<string, string>
+                            {
+                                { "Token", tokens.Token },
+                                { "Username", userLoginRequest.Username }
+                            };
+                            // Pass the dictionary to the view
+                            return View("LoginSuccess", userData);
                         }
                         else
                         {
@@ -105,6 +112,7 @@ namespace VideoContentService.Public.Controllers
                 return RedirectToAction("Error");
             }
         }
+
 
 
         public IActionResult Error()
