@@ -57,19 +57,42 @@
                         }
 
                         $.each(videos, function (index, video) {
-                            var videoCard = '<div class="col-md-4"><div class="card mb-4">';
-                            videoCard += video.imageId ? '<img src="' + video.imageId + '" class="card-img-top" alt="' + video.name + '">' : '<img src="path-to-default-image" class="card-img-top" alt="Default Image">';
-                            videoCard += '<div class="card-body"><h5 class="card-title">' + (video.name || "No title") + '</h5>';
-                            videoCard += '<p class="card-text">' + (video.description || "No description available.") + '</p>';
-                            videoCard += video.id > 0 ? '<a href="@Url.Action("Video", "VideoUser")/' + video.id + '" class="btn btn-primary">Watch Video</a>' : '';
-                            videoCard += '</div></div></div>';
-
-                            videoCards.append(videoCard);
+                            if (video.imageId) {
+                                // Fetch image URL based on imageId
+                                $.ajax({
+                                    url: 'https://localhost:7078/api/Images/' + video.imageId, // URL of the API that fetches the image URL
+                                    type: 'GET',
+                                    success: function (imageUrl) {
+                                        console.log("Image URL received:", imageUrl);
+                                        appendVideoCard(videoCards, video, imageUrl);
+                                    },
+                                    error: function () {
+                                        // Use a default image in case fetching the image URL fails
+                                        console.log("Error fetching image URL.");
+                                        appendVideoCard(videoCards, video, '/images/default-image.jpg');
+                                    }
+                                });
+                            } else {
+                                // Use a default image if imageId is not available
+                                console.log("Image ID is not available.");
+                                appendVideoCard(videoCards, video, '/images/default-image.jpg');
+                            }
                         });
 
                         $('#loadMoreBtn').data('page', page + 1);
                     }
                 });
+            }
+
+            function appendVideoCard(videoCards, video, imageUrl) {
+                var videoCard = '<div class="col-md-4"><div class="card mb-4">';
+                videoCard += '<img src="' + imageUrl + '" class="card-img-top" alt="' + video.name + '">';
+                videoCard += '<div class="card-body"><h5 class="card-title">' + (video.name || "No title") + '</h5>';
+                videoCard += '<p class="card-text">' + (video.description || "No description available.") + '</p>';
+                videoCard += video.id > 0 ? '<a href="@Url.Action("Video", "VideoUser")/' + video.id + '" class="btn btn-primary">Watch Video</a>' : '';
+                videoCard += '</div></div></div>';
+
+                videoCards.append(videoCard);
             }
         });
     </script>

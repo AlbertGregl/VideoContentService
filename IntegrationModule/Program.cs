@@ -82,6 +82,17 @@ builder.Services.AddDbContext<RwaMoviesContext>(options =>
 });
 
 
+// Configure CORS policy for the client application
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        builder => builder.WithOrigins("http://localhost:5108")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -102,6 +113,9 @@ app.UseHttpsRedirection();
 // Use authentication / authorization middleware
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Use CORS in the middleware pipeline
+app.UseCors("AllowOrigin"); 
 
 app.MapControllers();
 
