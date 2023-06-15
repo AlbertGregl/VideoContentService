@@ -21,14 +21,14 @@ namespace VideoContentService.Admin.Services
 
         public async Task<IEnumerable<TagResponse>> GetAllTagsAsync()
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/GetAll");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/Tags/GetAll");
             var content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<IEnumerable<TagResponse>>(content);
         }
 
         public async Task<TagResponse> GetTagByIdAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/GetById/{id}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}/Tags/GetById/{id}");
             var content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<TagResponse>(content);
         }
@@ -36,18 +36,18 @@ namespace VideoContentService.Admin.Services
         public async Task CreateTagAsync(TagRequest tag)
         {
             var content = new StringContent(JsonConvert.SerializeObject(tag), Encoding.UTF8, "application/json");
-            await _httpClient.PostAsync($"{_baseUrl}/CreateTag", content);
+            await _httpClient.PostAsync($"{_baseUrl}/Tags/CreateTag", content);
         }
 
         public async Task UpdateTagAsync(int id, TagRequest tag)
         {
             var content = new StringContent(JsonConvert.SerializeObject(tag), Encoding.UTF8, "application/json");
-            await _httpClient.PutAsync($"{_baseUrl}/UpdateTag/{id}", content);
+            await _httpClient.PutAsync($"{_baseUrl}/Tags/UpdateTag/{id}", content);
         }
 
         public async Task DeleteTagAsync(int id)
         {
-            await _httpClient.DeleteAsync($"{_baseUrl}/DeleteTag/{id}");
+            await _httpClient.DeleteAsync($"{_baseUrl}/Tags/DeleteTag/{id}");
         }
     }
 }
