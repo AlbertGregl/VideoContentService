@@ -52,7 +52,8 @@ namespace IntegrationModule.Controllers
                     Email = dbUser.Email,
                     CountryOfResidenceId = dbUser.CountryOfResidenceId,
                     Phone = dbUser.Phone,
-                    IsConfirmed = dbUser.IsConfirmed
+                    IsConfirmed = dbUser.IsConfirmed,
+                    DeletedAt = dbUser.DeletedAt
                 }).ToList();
 
                 return Ok(users);
@@ -84,7 +85,8 @@ namespace IntegrationModule.Controllers
                     Email = dbUser.Email,
                     CountryOfResidenceId = dbUser.CountryOfResidenceId,
                     Phone = dbUser.Phone,
-                    IsConfirmed = dbUser.IsConfirmed
+                    IsConfirmed = dbUser.IsConfirmed,
+                    DeletedAt = dbUser.DeletedAt
                 };
 
                 return Ok(user);
@@ -107,10 +109,13 @@ namespace IntegrationModule.Controllers
                     return NotFound();
                 }
 
+                // Update user properties
+                dbUser.Username = userRequest.Username;
                 dbUser.FirstName = userRequest.FirstName;
                 dbUser.LastName = userRequest.LastName;
                 dbUser.Email = userRequest.Email;
                 dbUser.Phone = userRequest.Phone;
+                dbUser.IsConfirmed = userRequest.IsConfirmed;
                 dbUser.CountryOfResidenceId = userRequest.CountryOfResidenceId;
 
                 _dbContext.SaveChanges();
@@ -124,7 +129,8 @@ namespace IntegrationModule.Controllers
                     Email = dbUser.Email,
                     CountryOfResidenceId = dbUser.CountryOfResidenceId,
                     Phone = dbUser.Phone,
-                    IsConfirmed = dbUser.IsConfirmed
+                    IsConfirmed = dbUser.IsConfirmed,
+                    DeletedAt = dbUser.DeletedAt
                 };
 
                 return Ok(user);
