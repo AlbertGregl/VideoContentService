@@ -18,6 +18,7 @@ builder.Services.AddHttpClient<VideoService>();
 builder.Services.AddHttpClient<CountryService>();
 builder.Services.AddHttpClient<TagService>();
 builder.Services.AddHttpClient<GenreService>();
+builder.Services.AddHttpClient<UserService>();
 
 var app = builder.Build();
 
