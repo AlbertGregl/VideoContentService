@@ -1,4 +1,4 @@
-﻿@model IntegrationModule.Models.UserRequest
+﻿@model IntegrationModule.Models.UserRegisterRequest
 
 @{
     ViewBag.Title = "Create User";
@@ -6,7 +6,25 @@
 
 <h2>Create User</h2>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
 <form asp-controller="UserAdmin" asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Username">Username:</label>
+        <input asp-for="Username" class="form-control" />
+    </div>
     <div class="form-group">
         <label asp-for="FirstName">First Name:</label>
         <input asp-for="FirstName" class="form-control" />
@@ -18,6 +36,10 @@
     <div class="form-group">
         <label asp-for="Email">Email:</label>
         <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Password">Password:</label>
+        <input asp-for="Password" type="password" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="Phone">Phone:</label>

@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<h2>Admin Dashboard</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <a href="@Url.Action("Index", "VideoAdmin")" class="btn btn-primary btn-block">Manage Videos</a>
+        </div>
+        <div class="col-md-4">
+            <a href="@Url.Action("Index", "CountryAdmin")" class="btn btn-primary btn-block">Manage Countries</a>
+        </div>
+        <div class="col-md-4">
+            <a href="@Url.Action("Index", "TagAdmin")" class="btn btn-primary btn-block">Manage Tags</a>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-md-4">
+            <a href="@Url.Action("Index", "GenreAdmin")" class="btn btn-primary btn-block">Manage Genres</a>
+        </div>
+        <div class="col-md-4">
+            <a href="@Url.Action("Index", "UserAdmin")" class="btn btn-primary btn-block">Manage Users</a>
+        </div>
+    </div>
+</div>

@@ -48,10 +48,10 @@ namespace VideoContentService.Admin.Services
             return JsonConvert.DeserializeObject<UserResponse>(content);
         }
 
-        public async Task CreateUserAsync(UserRequest user)
+        public async Task<HttpResponseMessage> CreateUserAsync(UserRegisterRequest user)
         {
             var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
-            await _httpClient.PostAsync($"{_baseUrl}/ManageUsers/Create", content);
+            return await _httpClient.PostAsync($"{_baseUrl}/Users/Register", content);
         }
 
         public async Task UpdateUserAsync(int id, UserRequest user)

@@ -1,10 +1,5 @@
 ﻿using IntegrationModule.Models;
 using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
-using System.Threading.Tasks;
-using VideoContentService.Admin.Models;
 using VideoContentService.Admin.Services;
 
 namespace VideoContentService.Admin.Controllers
@@ -40,18 +35,38 @@ namespace VideoContentService.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(UserRequest user)
+        public async Task<IActionResult> Create(UserRegisterRequest user)
         {
             try
             {
-                await _userService.CreateUserAsync(user);
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    var response = await _userService.CreateUserAsync(user);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        TempData["Message"] = "User created successfully!";
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Failed to create user. Please try again.";
+                        return RedirectToAction("Create");
+                    }
+                }
+                else
+                {
+                    // Return with validation errors
+                    return View(user);
+                }
             }
-            catch (HttpRequestException)
+            catch (Exception)
             {
+                TempData["Error"] = "An error occurred while creating the user.";
                 return RedirectToAction("Error", "Home");
             }
         }
+
 
         public async Task<IActionResult> Edit(int id)
         {
