@@ -3,8 +3,7 @@ using IntegrationModule.BLModels;
 using IntegrationModule.Services;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
+using System.Security.Cryptography;
 
 namespace IntegrationModule.Controllers
 {
@@ -20,6 +19,63 @@ namespace IntegrationModule.Controllers
             _dbContext = dbContext;
             _userRepository = userRepo;
         }
+
+
+        [HttpPost("[action]")]
+        public ActionResult ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Normalize and check if username exists in database
+            var username = request.Username.ToLower();
+            var user = _dbContext.Users.FirstOrDefault(x => x.Username == username);
+            if (user == null)
+            {
+                return BadRequest(new ChangePasswordResponse { IsSuccess = false, Message = "User doesn't exist" });
+            }
+
+            // Check if old password is correct
+            if (!Authenticate(username, request.CurrentPassword))
+            {
+                return BadRequest(new ChangePasswordResponse { IsSuccess = false, Message = "Old password is incorrect" });
+            }
+
+            // Check if the new password is the same as the old password
+            if (Authenticate(username, request.NewPassword))
+            {
+                return BadRequest(new ChangePasswordResponse { IsSuccess = false, Message = "New password is the same as old password" });
+            }
+
+            // Generate a new salt
+            byte[] newSalt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(newSalt);
+            }
+
+            // Hash the new password with the same settings as in Authenticate method
+            var newPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: request.NewPassword,
+                salt: newSalt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 100000,
+                numBytesRequested: 256 / 8));
+
+            // Set new password and salt
+            user.PwdHash = newPassword;
+            user.PwdSalt = Convert.ToBase64String(newSalt);
+
+            // Save changes to the database
+            _dbContext.SaveChanges();
+
+            return Ok(new ChangePasswordResponse { IsSuccess = true, Message = "Password changed successfully" });
+        }
+
+
+        // action for register user
 
         [HttpPost("[action]")]
         public ActionResult<User> Register([FromBody] UserRegisterRequest request)

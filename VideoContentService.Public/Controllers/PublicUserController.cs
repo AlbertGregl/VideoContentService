@@ -80,11 +80,12 @@ namespace VideoContentService.Public.Controllers
 
                         if (tokens != null)
                         {
-                            // Store the token and username in a dictionary
+                            // Store the token, username and id in a dictionary
                             var userData = new Dictionary<string, string>
                             {
                                 { "Token", tokens.Token },
-                                { "Username", userLoginRequest.Username }
+                                { "Username", userLoginRequest.Username },
+                                { "Id", response.Id.ToString() }
                             };
                             // Pass the dictionary to the view
                             return View("LoginSuccess", userData);

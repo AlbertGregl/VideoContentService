@@ -21,6 +21,7 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item" id="userMenu" style="display:none;">
                             <span class="navbar-text mr-3" id="usernameDisplay"></span>
+                            <a class="nav-link btn btn-info text-light" href="@Url.Action("Profile", "UserProfile")" style="margin-right: 10px;">Profile</a>
                             <a class="nav-link btn btn-primary text-light" href="#" onclick="logout()" style="margin-right: 10px;">Log Out</a>
                         </li>
                         <li class="nav-item" id="guestMenu" style="display:none;">
@@ -51,6 +52,8 @@
         function logout() {
             localStorage.removeItem('JWT');
             localStorage.removeItem('username');
+            localStorage.removeItem('id');
+            localStorage.removeItem('token'); // this is the token for the video service
             updateMenu();
             window.location.href = '/';
         }
@@ -58,6 +61,7 @@
         function updateMenu() {
             const jwt = localStorage.getItem('JWT');
             const username = localStorage.getItem('username');
+            const id = localStorage.getItem('id');
             if (jwt) {
                 document.getElementById('usernameDisplay').textContent = username;
                 document.getElementById('userMenu').style.display = 'block';

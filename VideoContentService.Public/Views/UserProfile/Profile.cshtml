@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "User Profile";
+}
+
+<div class="container mt-4">
+    <h2>User Profile</h2>
+    <div class="row">
+        <div class="col-md-8" id="userProfileInfo">
+            <!-- User profile information will be displayed here via AJAX -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Get user id from local storage
+            var userId = localStorage.getItem('id');
+            
+            // Fetch user information using AJAX
+            $.ajax({
+                url: '@Url.Action("GetUserById", "UserProfile")',
+                type: 'GET',
+                data: { id: userId },
+                success: function (data) {
+                    // On success, append user data to the div with id 'userProfileInfo'
+                    var userInfoHtml = '<p><strong>Username:</strong> ' + data.username + '</p>' +
+                                       '<p><strong>Email:</strong> ' + data.email + '</p>' +
+                                       '<a href="@Url.Action("ChangePassword", "UserProfile")" class="btn btn-warning">Change Password</a>';
+                    
+                    $('#userProfileInfo').append(userInfoHtml);
+                },
+                error: function () {
+                    alert('Error fetching user information.');
+                }
+            });
+        });
+    </script>
+}

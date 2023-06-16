@@ -12,9 +12,11 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 // Add configuration for the API
 builder.Services.Configure<ApiConfig>(builder.Configuration.GetSection("API"));
 
-// Add Services for the API
+// Add Services for the API 
 builder.Services.AddHttpClient<PublicUserService>();
 builder.Services.AddHttpClient<VideoUserService>();
+builder.Services.AddHttpClient<UserProfileService>();
+
 
 var app = builder.Build();
 
