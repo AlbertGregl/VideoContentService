@@ -25,6 +25,18 @@ namespace VideoContentService.Public.Controllers
             return Json(videos);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Video(int id, string token) // <-- add token as a parameter here
+        {
+            // You don't need to get token from the headers, as it's now a parameter
+            var video = await _videoUserService.GetVideoByIdAsync(id, token);
+            if (video == null)
+            {
+                return NotFound("Video not found");
+            }
+            return View(video);
+        }
+
     }
 }
 

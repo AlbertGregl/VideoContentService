@@ -20,10 +20,21 @@ namespace VideoContentService.Public.Services
 
         public async Task<IEnumerable<VideoResponse>> GetAllVideosAsync(string name, string genre, string orderBy, int page, int pageSize, string token)
         {
+            _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _httpClient.GetAsync($"{_baseUrl}/Videos/GetAll?name={name}&genre={genre}&orderBy={orderBy}&page={page}&pageSize={pageSize}");
             var content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<IEnumerable<VideoResponse>>(content);
+        }
+
+
+        public async Task<VideoResponse> GetVideoByIdAsync(int id, string token)
+        {
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _httpClient.GetAsync($"{_baseUrl}/Videos/GetById/{id}");
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<VideoResponse>(content);
         }
 
     }

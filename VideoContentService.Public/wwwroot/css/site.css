@@ -1,5 +1,7 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    background-color: goldenrod;
+    font-family: Consolas, monospace;
 }
 
 @media (min-width: 768px) {
@@ -15,4 +17,8 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.video-image-container img {
+    max-width: 200px;
 }

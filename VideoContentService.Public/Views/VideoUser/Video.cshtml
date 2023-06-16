@@ -1,18 +1,39 @@
 ﻿@model IntegrationModule.BLModels.VideoResponse
 
 @{
-    ViewData["Title"] = "Video Page";
+    ViewData["Title"] = "Video Details";
 }
 
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-8">
             <div class="card">
-                <img id="videoImage" data-image-id="@Model.ImageId" class="card-img-top" alt="@Model.Name">
                 <div class="card-body">
                     <h5 class="card-title">@Model.Name</h5>
-                    <p class="card-text">@Model.Description</p>
-                    <a href="@Model.StreamingUrl" target="_blank" class="btn btn-primary">Play Video</a>
+                    <div id="videoImage" class="video-image-container"></div>
+                    <p class="card-text">@Model.Description</p>                    
+                    <p><strong>Genre:</strong> <span id="genreName"></span></p>
+                    <p><strong>Duration:</strong> @TimeSpan.FromSeconds(Model.TotalSeconds).ToString(@"hh\:mm\:ss")</p>
+
+                    @if (!string.IsNullOrEmpty(Model.StreamingUrl))
+                    {
+                        <a href="@Model.StreamingUrl" class="btn btn-primary" target="_blank">Play Video</a>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Streaming URL not available.</p>
+                    }
+
+                    @if (Model.Tags != null && Model.Tags.Any())
+                    {
+                        <p><strong>Tags:</strong></p>
+                        <ul>
+                            @foreach (var tag in Model.Tags)
+                            {
+                                <li>@tag.Name</li>
+                            }
+                        </ul>
+                    }
                 </div>
             </div>
         </div>
@@ -20,15 +41,37 @@
 </div>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-            var imageId = $('#videoImage').data('image-id');
-
+            var imageId = '@Model.ImageId';
             if (imageId) {
-                $.get('@Url.Action("GetImageUrl", "Images")', { id: imageId }, function (imageUrl) {
-                    $('#videoImage').attr('src', imageUrl);
+                $.ajax({
+                    url: 'https://localhost:7078/api/Images/' + imageId,
+                    type: 'GET',
+                    success: function (imageUrl) {
+                        $('#videoImage').html('<img src="' + imageUrl + '" alt="@Model.Name" class="card-img-top">');
+                    },
+                    error: function () {
+                        $('#videoImage').html('<img src="/images/default-image.jpg" alt="Default image" class="card-img-top">');
+                    }
                 });
+            } else {
+                $('#videoImage').html('<img src="/images/default-image.jpg" alt="Default image" class="card-img-top">');
+            }
+            var genreId = '@Model.GenreId';
+            if (genreId) {
+                $.ajax({
+                    url: 'https://localhost:7078/api/Genres/GetById/' + genreId,
+                    type: 'GET',
+                    success: function (genre) {
+                        $('#genreName').text(genre.name); // assuming genre has a 'name' property
+                    },
+                    error: function () {
+                        $('#genreName').text('Unknown');
+                    }
+                });
+            } else {
+                $('#genreName').text('Unknown');
             }
         });
     </script>
