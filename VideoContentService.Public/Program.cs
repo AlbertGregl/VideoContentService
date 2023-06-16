@@ -20,11 +20,6 @@ builder.Services.AddHttpClient<UserProfileService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-//if (!app.Environment.IsDevelopment())
-//{
-//    app.UseExceptionHandler("/PublicUser/Error");
-//}
 app.UseStaticFiles();
 
 app.UseRouting();

@@ -22,11 +22,6 @@ builder.Services.AddHttpClient<UserService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-//if (!app.Environment.IsDevelopment())
-//{
-//    app.UseExceptionHandler("/Admin/Index");
-//}
 app.UseStaticFiles();
 
 app.UseRouting();
