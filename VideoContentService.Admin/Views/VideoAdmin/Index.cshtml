@@ -44,10 +44,9 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Initialize variables for current page and filters
+            // Initialize variables for current page, pageSize and filters
             var currentPage = 1;
-
-            // Get filters from local storage
+            var pageSize = 3;
             var nameFilter = localStorage.getItem('nameFilter') || '';
             var genreFilter = localStorage.getItem('genreFilter') || '';
 
@@ -56,19 +55,19 @@
             $("#filterByGenre").val(genreFilter);
 
             // Load initial data
-            loadData(currentPage, nameFilter, genreFilter);
+            loadData(currentPage, pageSize, nameFilter, genreFilter);
 
             // Event handler for next page button
             $("#nextPage").click(function () {
                 currentPage++;
-                loadData(currentPage, nameFilter, genreFilter);
+                loadData(currentPage, pageSize, nameFilter, genreFilter);
             });
 
             // Event handler for previous page button
             $("#previousPage").click(function () {
                 if (currentPage > 1) {
                     currentPage--;
-                    loadData(currentPage, nameFilter, genreFilter);
+                    loadData(currentPage, pageSize, nameFilter, genreFilter);
                 }
             });
 
@@ -79,50 +78,79 @@
                 localStorage.setItem('nameFilter', nameFilter);
                 localStorage.setItem('genreFilter', genreFilter);
                 currentPage = 1; // Reset the current page to 1 after applying filters
-                loadData(currentPage, nameFilter, genreFilter);
+                loadData(currentPage, pageSize, nameFilter, genreFilter);
             });
 
             // Load data using AJAX
-            function loadData(page, nameFilter, genreFilter) {
+            function loadData(page, pageSize, nameFilter, genreFilter) {
                 $.ajax({
                     url: "/VideoAdmin/LoadData",
-                    data: { page: page, nameFilter: nameFilter, genreFilter: genreFilter },
+                    data: { page: page, pageSize: pageSize, nameFilter: nameFilter, genreFilter: genreFilter },
                     type: "GET",
+                    dataType: "json",
                     success: function (data) {
-                        $("#videoTableBody").html(data);
-                        $("#currentPage").text(currentPage);
+                        // Clear table body
+                        $("#videoTableBody").empty();
 
-                        // Fetch genre names
-                        $('.genre').each(function () {
-                            var genreId = $(this).data('genre-id');
-                            var element = $(this);
-                            $.ajax({
-                                url: "https://localhost:7078/api/Genres/GetById/" + genreId,
-                                type: "GET",
-                                success: function (data) {
-                                    element.text(data.name);
-                                }
-                            });
+                        // Populate table with data
+                        $.each(data, function (i, item) {
+                            var tr = $("<tr>");
+                            tr.append($("<td>").text(item.id));
+                            tr.append($("<td>").text(item.name));
+                            tr.append($("<td>").text(item.description));
+
+                            var genreTd = $("<td>").addClass("genre");
+                            fetchGenreName(genreTd, item.genreId);
+                            tr.append(genreTd);
+
+                            tr.append($("<td>").text(item.totalSeconds));
+
+                            var streamingUrl = $("<a>").attr("href", item.streamingUrl).attr("target", "_blank").text("Click here to watch the video");
+                            tr.append($("<td>").append(streamingUrl));
+
+                            var img = $("<img>").attr("style", "height:100px;");
+                            fetchImageUrl(img, item.imageId);
+                            tr.append($("<td>").append(img));
+
+                            // Action buttons
+                            var editButton = $("<a>").addClass("btn btn-secondary").attr("href", "/VideoAdmin/Edit/" + item.id).text("Edit");
+                            var deleteButton = $("<a>").addClass("btn btn-danger").attr("href", "/VideoAdmin/Delete/" + item.id).text("Delete");
+                            tr.append($("<td>").append(editButton).append(" ").append(deleteButton));
+
+                            $("#videoTableBody").append(tr);
                         });
 
-                        // Fetch image URLs
-                        $('.image').each(function () {
-                            var imageId = $(this).data('image-id');
-                            var element = $(this);
-                            $.ajax({
-                                url: "https://localhost:7078/api/Images/" + imageId,
-                                type: "GET",
-                                success: function (data) {
-                                    element.attr('src', data);
-                                }
-                            });
-                        });
+                        // Update current page number
+                        $("#currentPage").text(page);
                     },
                     error: function () {
                         alert("An error occurred while loading data.");
                     }
                 });
             }
+
+            // Function to fetch genre name
+            function fetchGenreName(element, genreId) {
+                $.ajax({
+                    url: "https://localhost:7078/api/Genres/GetById/" + genreId,
+                    type: "GET",
+                    success: function (data) {
+                        element.text(data.name);
+                    }
+                });
+            }
+
+            // Function to fetch image URL
+            function fetchImageUrl(element, imageId) {
+                $.ajax({
+                    url: "https://localhost:7078/api/Images/" + imageId,
+                    type: "GET",
+                    success: function (data) {
+                        element.attr('src', data);
+                    }
+                });
+            }
         });
     </script>
-}   
+}
+

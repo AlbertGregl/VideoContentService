@@ -43,9 +43,9 @@ namespace VideoContentService.Admin.Services
             return JsonConvert.DeserializeObject<IEnumerable<VideoResponse>>(content);
         }
 
-        public async Task<IEnumerable<VideoResponse>> GetAllVideosWithGenreFilterAsync(int page, string nameFilter, string genreFilter)
+        public async Task<IEnumerable<VideoResponse>> GetAllVideosWithGenreFilterAsync(int page, int pageSize, string nameFilter, string genreFilter)
         {
-            var url = $"{_baseUrl}/Videos/GetAll?page={page}";
+            var url = $"{_baseUrl}/Videos/GetAll?page={page}&pageSize={pageSize}";
 
             if (!string.IsNullOrEmpty(nameFilter))
             {

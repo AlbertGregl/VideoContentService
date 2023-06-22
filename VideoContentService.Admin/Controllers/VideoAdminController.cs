@@ -106,18 +106,19 @@ namespace VideoContentService.Admin.Controllers
 
         // This method is called from the Index view to load the next page of videos via AJAX
         [HttpGet]
-        public async Task<IActionResult> LoadData(int page, string nameFilter, string genreFilter)
+        public async Task<IActionResult> LoadData(int page, int pageSize, string nameFilter, string genreFilter)
         {
             try
             {
                 await _videoService.ObtainJwtTokenForAdmin(_username, _password);
-                var videos = await _videoService.GetAllVideosWithGenreFilterAsync(page, nameFilter, genreFilter);
-                return PartialView("Partials/_VideoTableRows", videos);
+                var videos = await _videoService.GetAllVideosWithGenreFilterAsync(page, pageSize, nameFilter, genreFilter);
+                return Ok(videos);
             }
             catch (HttpRequestException)
             {
                 return PartialView("Partials/_Error");
             }
         }
+
     }
 }
