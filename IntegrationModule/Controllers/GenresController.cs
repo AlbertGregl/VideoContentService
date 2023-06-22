@@ -126,6 +126,14 @@ namespace IntegrationModule.Controllers
                 {
                     return NotFound();
                 }
+
+                // handle case where genre is referenced by a movie "GenreId" in Video table
+                var dbVideo = _dbContext.Videos.FirstOrDefault(v => v.GenreId == id);
+                if (dbVideo != null)
+                {
+                    return BadRequest("Cannot delete genre because it is referenced by a movie.");
+                }
+
                 _dbContext.Genres.Remove(dbGenre);
                 _dbContext.SaveChanges();
                 var genre = new GenreResponse

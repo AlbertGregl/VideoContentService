@@ -159,6 +159,18 @@ namespace IntegrationModule.Controllers
             {
                 return NotFound();
             }
+
+            // handle case where tag is referenced in VideoTag table with cascade delete
+            var videoTags = _dbContext.VideoTags.Where(vt => vt.TagId == id);
+            if (videoTags.Count() > 0)
+            {
+                foreach (var videoTag in videoTags)
+                {
+                    _dbContext.VideoTags.Remove(videoTag);
+                }
+            }
+            _dbContext.SaveChanges();
+
             _dbContext.Tags.Remove(tag);
             _dbContext.SaveChanges();
             return Ok();
