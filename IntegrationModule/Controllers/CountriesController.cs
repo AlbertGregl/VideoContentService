@@ -43,5 +43,28 @@ namespace IntegrationModule.Controllers
             }
         }
 
+        // GET: api/Countries/5 by id
+        [HttpGet("{id}")]
+        public ActionResult<CountryResponse> GetById(int id)
+        {
+            try
+            {
+                // Get country from database
+                var country = _dbContext.Countries.Find(id);
+                // Map to response model
+                var response = new CountryResponse
+                {
+                    Code = country.Code,
+                    Name = country.Name,
+                };
+                // Return response
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
     }
 }

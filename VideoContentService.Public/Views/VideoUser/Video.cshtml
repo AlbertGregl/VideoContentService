@@ -64,7 +64,7 @@
                     url: 'https://localhost:7078/api/Genres/GetById/' + genreId,
                     type: 'GET',
                     success: function (genre) {
-                        $('#genreName').text(genre.name); // assuming genre has a 'name' property
+                        $('#genreName').text(genre.name);
                     },
                     error: function () {
                         $('#genreName').text('Unknown');

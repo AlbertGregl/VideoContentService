@@ -16,6 +16,17 @@
         $(document).ready(function () {
             // Get user id from local storage
             var userId = localStorage.getItem('id');
+
+            // Function to fetch country name
+            function fetchCountryName(element, countryId) {
+                $.ajax({
+                    url: "https://localhost:7078/api/Countries/" + countryId,
+                    type: "GET",
+                    success: function (data) {
+                        element.text(data.name);
+                    }
+                });
+            }
             
             // Fetch user information using AJAX
             $.ajax({
@@ -24,11 +35,18 @@
                 data: { id: userId },
                 success: function (data) {
                     // On success, append user data to the div with id 'userProfileInfo'
-                    var userInfoHtml = '<p><strong>Username:</strong> ' + data.username + '</p>' +
-                                       '<p><strong>Email:</strong> ' + data.email + '</p>' +
-                                       '<a href="@Url.Action("ChangePassword", "UserProfile")" class="btn btn-warning">Change Password</a>';
+                    var userInfoHtml =  '<p><strong>Username:</strong> ' + data.username + '</p>' +
+                                        '<p><strong>Email:</strong> ' + data.email + '</p>' +
+                                        '<p><strong>First Name:</strong> ' + data.firstName + '</p>' +
+                                        '<p><strong>Last Name:</strong> ' + data.lastName + '</p>' +
+                                        '<p><strong>Country of Residence:</strong> <span id="countryName"></span></p>' +
+                                        '<p><strong>Phone:</strong> ' + data.phone + '</p>' +
+                                        '<a href="@Url.Action("ChangePassword", "UserProfile")" class="btn btn-warning">Change Password</a>';
                     
                     $('#userProfileInfo').append(userInfoHtml);
+
+                    // Fetch country name using AJAX
+                    fetchCountryName($('#countryName'), data.countryOfResidenceId);
                 },
                 error: function () {
                     alert('Error fetching user information.');
