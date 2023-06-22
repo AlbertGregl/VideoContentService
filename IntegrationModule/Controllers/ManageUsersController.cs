@@ -155,6 +155,8 @@ namespace IntegrationModule.Controllers
 
                 // Mark user as soft deleted by setting DeletedAt to current date and time
                 dbUser.DeletedAt = DateTime.UtcNow;
+                // deactivate the user
+                dbUser.IsConfirmed = false;
 
                 _dbContext.SaveChanges();
 

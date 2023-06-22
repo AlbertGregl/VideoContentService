@@ -114,7 +114,7 @@
 
                             // Action buttons
                             var editButton = $("<a>").addClass("btn btn-secondary").attr("href", "/VideoAdmin/Edit/" + item.id).text("Edit");
-                            var deleteButton = $("<a>").addClass("btn btn-danger").attr("href", "/VideoAdmin/Delete/" + item.id).text("Delete");
+                            var deleteButton = $("<a>").addClass("btn btn-danger").attr("href", "/VideoAdmin/Delete/" + item.id).text("Delete").attr("onclick", "return confirm('Are you sure you want to delete this?');");
                             tr.append($("<td>").append(editButton).append(" ").append(deleteButton));
 
                             $("#videoTableBody").append(tr);
