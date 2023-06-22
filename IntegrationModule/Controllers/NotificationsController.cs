@@ -1,6 +1,8 @@
 ﻿using IntegrationModule.BLModels;
 using IntegrationModule.Models;
+using IntegrationModule.Properties;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Net.Mail;
 
 namespace IntegrationModule.Controllers
@@ -10,9 +12,12 @@ namespace IntegrationModule.Controllers
     public class NotificationsController : ControllerBase
     {
         private readonly RwaMoviesContext _dbContext;
-        public NotificationsController(RwaMoviesContext dbContext)
+        private readonly SmtpSettings _smtpSettings;
+
+        public NotificationsController(RwaMoviesContext dbContext, IOptions<SmtpSettings> smtpSettings)
         {
             _dbContext = dbContext;
+            _smtpSettings = smtpSettings.Value;
         }
 
 
@@ -176,8 +181,8 @@ namespace IntegrationModule.Controllers
         [HttpPost("[action]")]
         public ActionResult SendAllNotifications()
         {
-            var client = new SmtpClient("127.0.0.1", 25);
-            var sender = "admin@video.com";
+            var client = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port);
+            var sender = _smtpSettings.Sender;
 
             try
             {

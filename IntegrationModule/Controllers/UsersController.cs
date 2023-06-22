@@ -13,13 +13,14 @@ namespace IntegrationModule.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly RwaMoviesContext _dbContext;
+        private readonly string _baseUrl;
 
-        public UsersController(RwaMoviesContext dbContext, IUserRepository userRepo)
+        public UsersController(RwaMoviesContext dbContext, IUserRepository userRepo, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _userRepository = userRepo;
+            _baseUrl = configuration["BaseUrl"];
         }
-
 
         [HttpPost("[action]")]
         public ActionResult ChangePassword([FromBody] ChangePasswordRequest request)
@@ -104,8 +105,8 @@ namespace IntegrationModule.Controllers
                 _dbContext.SaveChanges();
 
                 // notification body
-                var body = $"Please confirm your email by clicking on the following link: https://localhost:7078/validate-email.html?username={newUser.Username}&b64SecToken={newUser.SecurityToken}";
-     
+                var body = $"Please confirm your email by clicking on the following link: {_baseUrl}/validate-email.html?username={newUser.Username}&b64SecToken={newUser.SecurityToken}";
+
                 // create notification
                 var notification = new Notification
                 {
