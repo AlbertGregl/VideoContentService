@@ -144,19 +144,48 @@ namespace IntegrationModule.Controllers
         {
             try
             {
-                Genre? genre;
-                Image? image;
-                CreateOrUpdateGenreAndImage(videoRequest, out genre, out image);
+                // Retrieve the genre entity with the specified ID from the database
+                var genre = _dbContext.Genres.Find(videoRequest.GenreId);
+                // If the genre entity was not found, return a 404 Not Found response to the client
+                if (genre == null)
+                {
+                    return NotFound();
+                }
+
+                // Handle the image
+                Image image;
+                if (!string.IsNullOrEmpty(videoRequest.ImageUrl))
+                {
+                    // If ImageUrl is provided, check if the image already exists in the database
+                    image = _dbContext.Images.FirstOrDefault(i => i.Content == videoRequest.ImageUrl);
+                    if (image == null)
+                    {
+                        // If the image does not exist, create a new image and save it to the database
+                        image = new Image { Content = videoRequest.ImageUrl };
+                        _dbContext.Images.Add(image);
+                        _dbContext.SaveChanges();
+                    }
+                }
+                else
+                {
+                    // If ImageUrl is not provided, retrieve the image entity with the specified ID from the database
+                    image = _dbContext.Images.Find(videoRequest.ImageId);
+                    // If the image entity was not found, return a 404 Not Found response to the client
+                    if (image == null)
+                    {
+                        return NotFound();
+                    }
+                }
 
                 // Map the video request DTO to a new video entity
                 var video = new Video
                 {
                     Name = videoRequest.Name,
                     Description = videoRequest.Description,
-                    GenreId = genre.Id,
+                    Genre = genre,
                     TotalSeconds = videoRequest.TotalSeconds,
                     StreamingUrl = videoRequest.StreamingUrl,
-                    ImageId = image.Id
+                    Image = image
                 };
                 // Add the new video entity to the database
                 _dbContext.Videos.Add(video);
@@ -183,6 +212,8 @@ namespace IntegrationModule.Controllers
             }
         }
 
+
+
         // PUT method to update an existing video
         [Authorize]
         [HttpPut("[action]/{id}")]
@@ -190,10 +221,6 @@ namespace IntegrationModule.Controllers
         {
             try
             {
-                Genre? genre;
-                Image? image;
-                CreateOrUpdateGenreAndImage(videoRequest, out genre, out image);
-
                 // Retrieve the video entity with the specified ID from the database
                 var video = _dbContext.Videos.Find(id);
                 // If the video entity was not found, return a 404 Not Found response to the client
@@ -204,10 +231,10 @@ namespace IntegrationModule.Controllers
                 // Update the video entity with the values from the video request DTO
                 video.Name = videoRequest.Name;
                 video.Description = videoRequest.Description;
-                video.GenreId = genre.Id;
+                video.GenreId = videoRequest.GenreId;
                 video.TotalSeconds = videoRequest.TotalSeconds;
                 video.StreamingUrl = videoRequest.StreamingUrl;
-                video.ImageId = image.Id;
+                video.ImageId = videoRequest.ImageId;
                 // Save the changes to the database
                 _dbContext.SaveChanges();
                 // Map the updated video entity to its corresponding DTO
@@ -230,6 +257,7 @@ namespace IntegrationModule.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
 
         // DELETE method to delete an existing video
         [Authorize]
@@ -275,37 +303,37 @@ namespace IntegrationModule.Controllers
         }
 
         
-        private void CreateOrUpdateGenreAndImage(VideoRequest videoRequest, out Genre? genre, out Image? image)
-        {
-            // Normalize the genre name by converting it to lowercase
-            var genreName = videoRequest.GenreName.ToLower();
-            // Check if the specified genre exists in the database
-            genre = _dbContext.Genres.FirstOrDefault(g => g.Name == videoRequest.GenreName);
-            // If the genre doesn't exist, create a new genre entity
-            if (genre == null)
-            {
-                genre = new Genre
-                {
-                    Name = videoRequest.GenreName
-                };
-                _dbContext.Genres.Add(genre);
-            }
+        //private void CreateOrUpdateGenreAndImage(VideoRequest videoRequest, out Genre? genre, out Image? image)
+        //{
+        //    // Normalize the genre name by converting it to lowercase
+        //    var genreName = videoRequest.GenreName.ToLower();
+        //    // Check if the specified genre exists in the database
+        //    genre = _dbContext.Genres.FirstOrDefault(g => g.Name == videoRequest.GenreName);
+        //    // If the genre doesn't exist, create a new genre entity
+        //    if (genre == null)
+        //    {
+        //        genre = new Genre
+        //        {
+        //            Name = videoRequest.GenreName
+        //        };
+        //        _dbContext.Genres.Add(genre);
+        //    }
 
-            // Check if the specified image exists in the database
-            image = _dbContext.Images.FirstOrDefault(i => i.Content == videoRequest.ImageUrl);
-            // Create a new image entity
-            if (image == null)
-            {
-                image = new Image
-                {
-                    Content = videoRequest.ImageUrl
-                };
-                // Add the new image entity to the database
-                _dbContext.Images.Add(image);
-            }
-            // Save the changes to the database
-            _dbContext.SaveChanges();
-        }
+        //    // Check if the specified image exists in the database
+        //    image = _dbContext.Images.FirstOrDefault(i => i.Content == videoRequest.ImageUrl);
+        //    // Create a new image entity
+        //    if (image == null)
+        //    {
+        //        image = new Image
+        //        {
+        //            Content = videoRequest.ImageUrl
+        //        };
+        //        // Add the new image entity to the database
+        //        _dbContext.Images.Add(image);
+        //    }
+        //    // Save the changes to the database
+        //    _dbContext.SaveChanges();
+        //}
 
     }
 }

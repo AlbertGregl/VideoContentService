@@ -21,6 +21,14 @@ namespace VideoContentService.Admin.Services
             _baseUrl = apiConfig.Value.BaseUrl;
         }
 
+        // Get Genre by Id
+        public async Task<GenreResponse> GetGenreByIdAsync(int id)
+        {
+            var response = await _httpClient.GetAsync($"{_baseUrl}/Genres/GetById/{id}");
+            var content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<GenreResponse>(content);
+        }
+
         // Set the JWT token to be used in the Authorization header.
         public void SetJwtToken(string token)
         {

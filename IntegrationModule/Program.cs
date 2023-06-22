@@ -86,7 +86,7 @@ builder.Services.AddDbContext<RwaMoviesContext>(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigin",
-        builder => builder.WithOrigins("http://localhost:5108")
+        builder => builder.WithOrigins("http://localhost:5108", "http://localhost:5249")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());

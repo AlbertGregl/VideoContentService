@@ -6,10 +6,16 @@
         <td>@video.Id</td>
         <td>@video.Name</td>
         <td>@video.Description</td>
-        <td>@video.GenreId</td>
+        <td class="genre" data-genre-id="@video.GenreId">Loading...</td>
         <td>@video.TotalSeconds</td>
-        <td>@video.StreamingUrl</td>
-        <td>@video.ImageId</td>
+        <td>
+            <a href="@video.StreamingUrl" target="_blank">Click here to watch the video</a>
+        </td>
+
+        <td>
+            <img class="image" data-image-id="@video.ImageId" src="#" style="height:100px;">
+        </td>
+
         <td>
             <a asp-action="Edit" asp-route-id="@video.Id" class="btn btn-secondary">Edit</a>
             <a asp-action="Delete" asp-route-id="@video.Id" class="btn btn-danger">Delete</a>

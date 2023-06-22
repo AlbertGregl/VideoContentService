@@ -23,9 +23,8 @@
 
     <div class="form-group">
         <label asp-for="GenreId">Genre</label>
-        <select asp-for="GenreId" class="form-control">
-            <!-- TODO dropdown with genres from database -->
-            <option value="">Select Genre</option>
+        <select id="genresDropdown" asp-for="GenreId" class="form-control">
+            <!-- Genres will be populated using AJAX -->
         </select>
         <span asp-validation-for="GenreId" class="text-danger"></span>
     </div>
@@ -44,8 +43,12 @@
 
     <div class="form-group">
         <label asp-for="ImageId">Image</label>
-        <!-- TODO handle images -->
-        <input asp-for="ImageId" class="form-control" />
+        <select id="imagesDropdown" asp-for="ImageId" class="form-control">
+            <!-- Images will be populated using AJAX -->
+        </select>
+        <div id="imageContainer">
+            <!-- Image URL will be displayed when an image is selected -->
+        </div>
         <span asp-validation-for="ImageId" class="text-danger"></span>
     </div>
 
@@ -54,3 +57,50 @@
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
 </form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Fetch genres for dropdown
+            $.ajax({
+                url: "https://localhost:7078/api/Genres/GetAll",
+                type: "GET",
+                success: function (data) {
+                    var dropdown = $("#genresDropdown");
+                    dropdown.empty();
+                    dropdown.append($("<option />").val("").text("Select Genre"));
+                    $.each(data, function () {
+                        dropdown.append($("<option />").val(this.id).text(this.name));
+                    });
+                    dropdown.val("@Model.GenreId"); // Set the selected value
+                }
+            });
+
+            // Fetch images for dropdown
+            $.ajax({
+                url: "https://localhost:7078/api/Images",
+                type: "GET",
+                success: function (data) {
+                    var dropdown = $("#imagesDropdown");
+                    dropdown.empty();
+                    dropdown.append($("<option />").val("").text("Select Image"));
+                    $.each(data, function () {
+                        dropdown.append($("<option />").val(this.id).text(this.content));
+                    });
+                    dropdown.val("@Model.ImageId"); // Set the selected value
+                }
+            });
+
+            // Display image URL when an image is selected
+            $("#imagesDropdown").change(function () {
+                var selectedImageUrl = $(this).find("option:selected").text();
+                if (selectedImageUrl) {
+                    $("#imageContainer").text(selectedImageUrl);
+                } else {
+                    $("#imageContainer").empty();
+                }
+            });
+        });
+    </script>
+}
+

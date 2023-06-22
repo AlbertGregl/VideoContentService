@@ -25,13 +25,6 @@ namespace VideoContentService.Admin.Services
             return JsonConvert.DeserializeObject<IEnumerable<GenreResponse>>(content);
         }
 
-        public async Task<GenreResponse> GetGenreByIdAsync(int id)
-        {
-            var response = await _httpClient.GetAsync($"{_baseUrl}/Genres/GetById/{id}");
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<GenreResponse>(content);
-        }
-
         public async Task CreateGenreAsync(GenreRequest genre)
         {
             var content = new StringContent(JsonConvert.SerializeObject(genre), Encoding.UTF8, "application/json");

@@ -91,6 +91,32 @@
                     success: function (data) {
                         $("#videoTableBody").html(data);
                         $("#currentPage").text(currentPage);
+
+                        // Fetch genre names
+                        $('.genre').each(function () {
+                            var genreId = $(this).data('genre-id');
+                            var element = $(this);
+                            $.ajax({
+                                url: "https://localhost:7078/api/Genres/GetById/" + genreId,
+                                type: "GET",
+                                success: function (data) {
+                                    element.text(data.name);
+                                }
+                            });
+                        });
+
+                        // Fetch image URLs
+                        $('.image').each(function () {
+                            var imageId = $(this).data('image-id');
+                            var element = $(this);
+                            $.ajax({
+                                url: "https://localhost:7078/api/Images/" + imageId,
+                                type: "GET",
+                                success: function (data) {
+                                    element.attr('src', data);
+                                }
+                            });
+                        });
                     },
                     error: function () {
                         alert("An error occurred while loading data.");
